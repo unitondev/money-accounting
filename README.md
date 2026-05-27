@@ -65,8 +65,26 @@ The entire transaction sheet will be filled in a single currency, and you need t
 </details>
 
 ## Android automation
-TBD
+1. Download [MacroDroid](https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid) - app for automation.
+2. There are 2 shortcuts for your Android:
+   1) automated - triggered when you receive a SMS notifying you of a transaction.
+   2) manual - triggered manually by you and is used for all cases where you don't receive a SMS
+3. for automated - import [automated](./shortcuts%20for%20Android/Automatic_transaction.macro) macros in MacroDroid.
+   1. Change a trigger keyword that will be searched in incoming SMS messages. If the SMS contains this keyword, the automation will process the transaction. (You can also choose which contact the message will come from inside the trigger)
+   2. Paste URL from deployed Apps Script here in `HTTP Request (POST)` action (see the screenshot in the spoiler below):
+<details>
+   <summary>Spoiler with screenshots</summary>
+
+![Screenshot_1.png](screenshots%20for%20README/Screenshot_1.png)
+![Screenshot_2.png](screenshots%20for%20README/Screenshot_2.png)
+
+</details>
+
+4. for manual - import [manual](./shortcuts%20for%20Android/Manual_transaction.macro) macros in MacroDroid.
+   1. Also paste URL from deployed Apps Script here in `HTTP Request (POST)` action like for automated macros
+   2. Add widget for your manual button. Go to your home screen, long press an empty space, tap Widgets, find MacroDroid and choose Custom widget. After you drag-n-drop it to your screen - select `Manual transaction` widget
+5. In AppsScripts in Google sheets implement the [smsParser](./google%20sheets/SmsParser.js) method and integrate it into: `switch (requestData.Action) { case "automated":`. This method is responsible for parsing raw bank SMS messages and extracting transaction data. Because SMS formats differ between banks, the parsing logic must be customized manually for the user’s bank message format.
 
 ## Test
-Run manual shortcut you created in the previous step. Input values. When the shortcut is complete, check the notification: if everything went well, you’ll see `Transaction call succeeded`. Congratulations, the row with transaction has been added to your Google Sheets. \
-The automated shortcut can only be tested when paying with Apple Pay via a terminal.
+Run manual shortcut. Input values. When the shortcut is complete, check the notification: if everything went well, you’ll see `Transaction call succeeded`. Congratulations, the row with transaction has been added to your Google Sheets. \
+The automated shortcut can only be tested when paying with Apple Pay via a terminal / receiving SMS with transaction.
